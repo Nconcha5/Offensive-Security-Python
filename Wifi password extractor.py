@@ -1,19 +1,19 @@
-from subprocess import check_output as retrive
+from subprocess import check_output as retrieve
 
-Raw = retrive(['netsh','wlan','show','profiles']).decode('utf-8').split("\n")
-Proflies = [x.split(":")[1][1:-1] for x in Raw if "All User Profile" in x]
+Raw = retrieve(['netsh','wlan','show','profiles']).decode('utf-8').split("\n")
+Profiles = [x.split(":")[1][1:-1] for x in Raw if "All User Profile" in x]
 
 file_name = "Passwords.dat"
 
-with open(file_name, "w")
+with open(file_name, "w") as file:
     for profile in Profiles:
-        Dig = retrive(['netsh','wlan','show','profile',profile,'key=clear']).decode('utf-8').split("\n")
+        Dig = retrieve(['netsh','wlan','show','profile',profile,'key=clear']).decode('utf-8').split("\n")
         Result = [x.split(":")[1][1:-1] for x in Dig if "Key Content" in x]
         try:
             string = "{:<} | {:<}".format(profile, Result[0])
-        except Exception as Error:
+        except IndexError:
             string = "{:<} | NULL".format(profile)
 
-        File.write(string + "\n")
+        file.write(string + "\n")
 
 print("Code Executed Successfully...")
